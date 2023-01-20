@@ -5,23 +5,9 @@ services:
     container_name: redis
     logging:
       driver: "none"
-  mongodb:
-    image: mongo
-    container_name: mongodb
-    logging:
-      driver: "none"
-    environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - mongodb:/data/db
-    ports:
-      - 27017:27017
-    restart: unless-stopped
   api:
     image: "ghcr.io/novuhq/novu/api:0.10.1"
     depends_on:
-      - mongodb
       - redis
     container_name: api
     environment:
@@ -50,7 +36,6 @@ services:
   ws:
     image: "ghcr.io/novuhq/novu/ws:0.10.1"
     depends_on:
-      - mongodb
       - redis
     container_name: ws
     environment:
@@ -95,5 +80,3 @@ services:
       WIDGET_URL: ${WIDGET_URL}
     ports:
       - 4701:4701
-volumes:
-  mongodb: ~
